@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="permission">
+        <field name="name">Codilar Project and Timesheet</field>
+        <field name="description">Access section to see our module.</field>
+    </record>
+
+    <record id="group_user_user" model="res.groups">
+        <field name="name">user</field>
+        <field name="category_id" ref="codilar.permission"/>
+    </record>
+
+    <record id="group_user_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="codilar.permission"/>
+    </record>
+
+
+</odoo>
+
+

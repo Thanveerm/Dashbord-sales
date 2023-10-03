@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr" position="replace">
+            <th name="th_start_date" class="text-left">Item</th>
+            <th name="th_start_date" class="text-right">Start Date</th>
+            <th name="th_end_date" class="text-right">End Date</th>
+            <th name="th_start_date" class="text-right">Quantity</th>
+            <th name="th_start_date" class="text-right">Unit price</th>
+            <th name="th_start_date" class="text-right">Taxes</th>
+            <th name="th_start_date" class="text-right">Amount</th>
+        </xpath>
+
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody" position="replace">
+            <t t-foreach="doc.order_line" t-as="line">
+                <tr>
+                    <td name="td_name">
+                        <span t-field="line.name"/>
+                    </td>
+
+                    <td name="td_start_date" class="text-right">
+                        <span t-field="line.start_date"/>
+                    </td>
+                    <td name="td_end_date" class="text-right">
+                        <span t-field="line.end_date"/>
+                    </td>
+
+                    <td name="td_quantity" class="text-right">
+                        <span t-field="line.product_uom_qty"/>
+                        <span t-field="line.product_uom"/>
+                    </td>
+                    <td name="td_priceunit" class="text-right">
+                        <span t-field="line.price_unit"/>
+                    </td>
+                    <td t-if="display_discount" class="text-right"
+                        groups="product.group_discount_per_so_line">
+                        <span t-field="line.discount"/>
+                    </td>
+                    <td name="td_taxes" class="text-right">
+                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>
+                    </td>
+                    <td name="td_subtotal" class="text-right o_price_total">
+                        <span t-field="line.price_subtotal"
+                              groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <span t-field="line.price_total"
+                              groups="account.group_show_line_subtotals_tax_included"/>
+                    </td>
+
+
+                </tr>
+            </t>
+
+        </xpath>
+
+
+    </template>
+</odoo>

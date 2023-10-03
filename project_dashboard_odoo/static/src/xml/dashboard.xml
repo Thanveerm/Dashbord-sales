@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="PjDashboard">
+        <div class="oh_dashboards" style=" background-color: #e9e6e6; height:100vh;">
+            <div class="container-fluid o_pj_dashboard" style=" background-color: #e9e6e6;height:100vh">
+            </div>
+        </div>
+    </t>
+    <t t-name="DashboardProject">
+        <div class="container pt-5">
+            <div class="row pt-2">
+  <div class="col-sm-3">
+        <select class="form-select fs-5 select_box" id="project_selection">
+  <option>Choose Year</option>
+</select>
+
+
+  </div>
+                <div class="col-sm-3">
+        <select class="form-select fs-5 select_box" id="month_selection">
+  <option value='month'>Choose month</option>
+</select>
+
+
+  </div>
+                <div class="col-sm">
+        <button type="button" class="btn btn-outline-primary btn-lg  rounded-4 ms-4 button-border" id="filter_button"><i class="bi bi-search fs-3 fw-bold"></i></button>
+
+
+  </div>
+
+</div>
+</div>
+        <div class="container-fluid mt-5">
+
+        <div class="row">
+        <div class="col-sm-12">
+        <div class="card">
+        <div class="card-body">
+        <table class="table table-bordered border-dark table-striped  ">
+            <thead>
+            <tr>
+            <th class="table-info fs-5">Expected Revenue</th>
+                <th class="table-warning fs-5">Fixed Cost</th>
+                <th class="table-primary fs-5">TM/AMC/DR</th>
+                <th class="table-danger fs-5">Total</th>
+                <th class="table-primary fs-5">Additional Invoice</th>
+                <th class="table-warning fs-5">Pending Milestone</th>
+                <th class="table-info fs-5">Sales Projection</th>
+                <th class="table-warning fs-5">Total Estimation for This month</th>
+                <th class="table-success fs-5">Revenue for this month</th>
+                <th class="table-warning fs-5">Not Achieved</th>
+                <th class="table-primary fs-5">Target vs Achieved Percentage</th>
+                <th class="table-danger fs-5">Actually Revenue Excluding Pending Mile stone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Projections</th>
+                    <td id="fixed_forcast">00</td>
+                    <td id="timesheet_forcast">00</td>
+                    <td id="total_forcast">00</td>
+                    <td id="additional_invoice">00</td>
+                    <td id="pending_projection">00</td>
+                    <td>00</td>
+                    <td id="total_estimation_this_month_forcast">00</td>
+                    <td rowspan="3" class="text-center align-middle" id="revenue_forcast_this_month">00</td>
+                    <td rowspan="3" class="text-center align-middle" id="total_not_achieved">00</td>
+                    <td rowspan="3" class="text-center align-middle" id="target_vs_achieved_percentage">00</td>
+                    <td id="actual_revenue">00</td>
+
+                </tr>
+                <tr>
+                    <th>Achieved</th>
+                    <td id="fixed_achieved">00</td>
+                    <td id="timesheet_achieved">00</td>
+                    <td id="total_achieved">00</td>
+                    <td id="additional_invoice_amount">00</td>
+                    <td id="pending_achieved">00</td>
+                    <td>00</td>
+                    <td id="total_estimation_this_month_achieved">00</td>
+                    <td id="actual_achieved">00</td>
+
+
+                </tr>
+                <tr>
+                    <th>Percentage</th>
+                    <td id="percentage_fixed">00</td>
+                    <td id="percentage_timesheet">00</td>
+                    <td id="total_percentage">00</td>
+                    <td id="additional_invoice_percentage">00</td>
+                    <td id="percentage_pending_milestone">00</td>
+                    <td>00</td>
+                    <td id="total_estimation_this_month_percentage">00</td>
+                    <td id="actual_percentage">00</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+            <!--==================================================================================    -->
+            <div class="container">
+            <div class="row mt-5 pt-2">
+  <div class="col-sm-3">
+        <select class="form-select fs-5 select_box" id="year_wise_selection">
+  <option>Choose Year</option>
+</select>
+
+
+  </div>
+                         </div>
+            </div>
+
+            <div class="row mt-5">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-bordered border-dark table-striped">
+  <thead>
+    <tr>
+      <th class="table-danger fs-5">S NO</th>
+        <th class="table-warning fs-5">Month</th>
+        <th class="table-primary fs-5">Forcast</th>
+        <th class="table-success fs-5">Achieved</th>
+    </tr>
+  </thead>
+            <tbody id="tbody">
+
+
+  </tbody>
+</table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+
+
+    </t>
+
+    <t t-name="DashboardChart">
+
+    </t>
+</templates>

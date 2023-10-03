@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherit" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[contains(@class, 'page')]/p[1]" position="replace">
+            <div t-if="o.partner_bank_id">
+                <h4>
+                    <u>Bank details</u>
+                </h4>
+                <p>
+                    <b>Bank:</b>
+                    <span t-field="o.partner_bank_id.bank_id"/>
+                </p>
+                <p>
+                    <b>Account Number:</b>
+                    <span t-field="o.partner_bank_id.acc_number"/>
+                </p>
+                <p>
+                    <b>Account Holder Name:</b>
+                    <span t-field="o.partner_bank_id.acc_holder_name"/>
+                </p>
+                <p>
+                    <b>Company:</b>
+                    <span t-field="o.partner_bank_id.company_id"/>
+                </p>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'page')]/table/tbody/t/tr/t[3]" position="replace">
+        </xpath>
+    </template>
+</odoo>

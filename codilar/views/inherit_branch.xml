@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+        <record id="inherit_branch_custom_filed" model="ir.ui.view">
+            <field name="name">inherit.branch.custom.filed</field>
+            <field name="model">res.branch</field>
+            <field name="inherit_id" ref="multi_branch_base.view_branch_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="gst_num"/>
+                </xpath>
+                <xpath expr="//field[@name='gst_num']" position="after">
+                    <field name="pan_num"/>
+                </xpath>
+                <xpath expr="//field[@name='pan_num']" position="after">
+                    <field name="cin_num"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
