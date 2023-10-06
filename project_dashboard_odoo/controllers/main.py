@@ -62,7 +62,11 @@ class ProjectFilter(http.Controller):
         start_year = current_year - 10
         end_year = current_year + 5
         years = list(range(start_year, end_year + 1))
-        response_data = {'years': years}
+        financial_years = [f"{year}-{year + 1}" for year in years]
+        # response_data = {'years': years}
+        response_data = {
+            'financial_years': financial_years,
+        }
 
         # Log the response before returning
         print(json.dumps(response_data))
@@ -72,8 +76,6 @@ class ProjectFilter(http.Controller):
     @http.route('/project/filter-apply/year-wise', auth='public', type='json')
     def project_filter_apply_year_wise(self, **kw):
         data = kw['data']
-
-        print("Hpppp", data)
 
         # Extract start_date and end_date from the input data
         start_date = data['start_date']
@@ -109,14 +111,15 @@ class ProjectFilter(http.Controller):
     @http.route('/sale/order/year', auth='public', type='json')
     def sale_order_year(self):
         current_year = datetime.now().year
+        next_year = current_year + 1
 
         # Initialize a dictionary to store month-wise data
-        monthly_data = defaultdict(lambda: {'subtotal': 0.0, 'total': 0.0})
+        monthly_data = defaultdict(lambda: {'subtotal': 0.0, 'total': 0.0, })
 
         # Query sale.order.line records for the current year
         sale_order_lines = request.env['sale.order.line'].search([
-            ('end_date', '>=', f'{current_year}-01-01'),
-            ('end_date', '<=', f'{current_year}-12-31')
+            ('end_date', '>=', f'{current_year}-04-01'),
+            ('end_date', '<=', f'{next_year}-03-31')
         ])
 
         # Iterate through the sale order lines and calculate month-wise totals
@@ -129,11 +132,23 @@ class ProjectFilter(http.Controller):
             monthly_data[f'{month}']['subtotal'] += subtotal
             monthly_data[f'{month}']['total'] += total
 
+        # for month, data in monthly_data.items():
+        #     print("Month:", month)
+        #     print("Total:", data['total'])
+        #     print("sub total", data['subtotal'])
+        #     try:
+        #         percentage_month_wise = (data['subtotal'] / data['total']) * 100
+        #         print("percentage_month_wise", percentage_month_wise)
+        #     except ZeroDivisionError:
+        #         percentage_month_wise = 0
+        #         print("percentage_year_wise", percentage_month_wise)
+
         # Convert the defaultdict to a regular dictionary
         monthly_data_dict = dict(monthly_data)
 
         return {
             'month_wise_totals': monthly_data_dict,
+
         }
 
     @http.route('/month/filter', auth='public', type='json')
@@ -141,13 +156,24 @@ class ProjectFilter(http.Controller):
         current_year = datetime.now().year
 
         # Generate a list of 12 months for the current year
-        months = [datetime(current_year, month, 1).strftime('%B') for month in range(1, 13)]
-        # months = [datetime(current_year, month, 1).strftime('%B') for month in range(1, 13)]
+        z = {}
+        months = [datetime(current_year, month, 1).strftime('%B') for month in range(4, 13)]
+        month = [datetime(current_year, month, 1).strftime('%B') for month in range(1, 4)]
 
-        response_data = {'months': months}
+        for index, month_name in enumerate(months, start=4):
+            z[index] = month_name
+        for index, months_name in enumerate(month, start=1):
+            z[index] = months_name
+        # response_data = {'months': months,
+        #
+        #                  }
+        response_data = {
+            'z': z
+        }
 
         # Log the response before returning
         print(json.dumps(response_data))
+        print("Total month", z)
 
         return json.dumps(response_data)
 
@@ -223,16 +249,13 @@ class ProjectFilter(http.Controller):
         for key in common_keys:
             value += pending_data_dict[key]
 
-
         # calculating additional invoice amount
         additional_invoice_date = request.env['account.move'].search(
             [('invoice_date', '>', start_date), ('invoice_date', '<=', end_date), ('invoice_origin', '=', False),
              ('move_type', '=', 'out_invoice')])
         additional_invoice_amount = 0.0  # storing total value of additional invoice
         for invoice in additional_invoice_date:
-
             additional_invoice_amount = additional_invoice_amount + invoice.amount_untaxed
-
 
         # Query sale.order.line records based on start_date and end_date
         sale_order_lines = request.env['sale.order.line'].search(
@@ -303,8 +326,6 @@ class ProjectFilter(http.Controller):
         except ZeroDivisionError:
             percentage_pending_milestone = 0
 
-        print(value, "ooo")
-        print(pending_data, "ooo")
         return {
             'fixed_forcast': sum_fixed,
             'timesheet_forcast': sum_tm,
@@ -329,6 +350,6 @@ class ProjectFilter(http.Controller):
             'actual_revenue': actual_revenue,
             'actual_achieved': actual_achieved,
             'actual_percentage': actual_percentage,
-            'percentage_pending_milestone': percentage_pending_milestone
+            'percentage_pending_milestone': percentage_pending_milestone,
 
         }

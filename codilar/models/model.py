@@ -29,8 +29,8 @@ class StartDateTask(models.Model):
             #     raise ValidationError("Task achieved amount should not exceed forcast")
             if rec.task_progress and rec.sale_line_id:
                 rec.sale_line_id.achieved = rec.task_progress
-                rec.sale_line_id.not_achieved = rec.sale_line_id.price_unit - rec.sale_line_id.achieved
-                rec.sale_line_id.percentage = (rec.sale_line_id.achieved / rec.sale_line_id.price_unit) * 100
+                rec.sale_line_id.not_achieved = rec.sale_line_id.forcast - rec.sale_line_id.achieved
+                rec.sale_line_id.percentage = (rec.sale_line_id.achieved / rec.sale_line_id.forcast) * 100
 
     @api.depends('allocated_hr')
     def _compute_allocated_hr(self):
@@ -84,6 +84,12 @@ class SaleOrderTreeView(models.Model):
     milestone_type = fields.Char(string="Milestone type")
     pending_boolean_field = fields.Boolean(string="Pending", readonly=True)
     user = fields.Many2one('res.users', String="Project manager")
+
+    @api.onchange('payment_term_id')
+    def _onchange_payment_term_id(self):
+        for rec in self:
+            if rec.payment_term_id:
+                rec.order_line.payment_terms = rec.payment_term_id
 
     @api.onchange('order_line.pending_boolean_field')
     def _onchange_pending_boolean_field(self):
@@ -201,7 +207,6 @@ class SaleOrderTreeView(models.Model):
         for i in a:
             if i.sale_line_id.forcast:
                 i.forcast = i.sale_line_id.forcast
-                print("forcast", i.forcast)
 
     def confirm_milestone(self):
         for i in self:

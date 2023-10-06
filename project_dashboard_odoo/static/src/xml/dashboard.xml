@@ -105,16 +105,15 @@
 </div>
             <!--==================================================================================    -->
             <div class="container">
-            <div class="row mt-5 pt-2">
-  <div class="col-sm-3">
-        <select class="form-select fs-5 select_box" id="year_wise_selection">
-  <option>Choose Year</option>
-</select>
+    <div class="row mt-5 pt-2">
+        <div class="col-sm-3">
+            <select class="form-select fs-5 select_box" id="year_wise_selection">
+                <option>Choose Year</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-
-  </div>
-                         </div>
-            </div>
 
             <div class="row mt-5">
   <div class="col-sm-12">
@@ -127,6 +126,7 @@
         <th class="table-warning fs-5">Month</th>
         <th class="table-primary fs-5">Forcast</th>
         <th class="table-success fs-5">Achieved</th>
+<!--        <th class="table-success fs-5">Percentage</th>-->
     </tr>
   </thead>
             <tbody id="tbody">

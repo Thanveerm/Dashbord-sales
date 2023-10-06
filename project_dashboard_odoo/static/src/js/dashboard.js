@@ -76,12 +76,14 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
             var currentYear = new Date().getFullYear();
              let serialNumber = 1;
              for (const key in response.month_wise_totals)
+
 {
              var Html="<tr>
                 <td >"+serialNumber+" </td>
                 <td>"+key+"</td>
                 <td>"+response.month_wise_totals[key]['subtotal']+"</td>
                 <td>"+response.month_wise_totals[key]['total']+"</td>
+//                <td>"+response.percentage_month_wises"></td>
             </tr>";
             $('#tbody').append(Html);
             serialNumber++;
@@ -103,10 +105,31 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
             flag = 1
             var selectedYear = $('#project_selection').val();
             var selectedMonth = $('#month_selection').val();
-            var startDate = new Date(selectedYear, selectedMonth - 1, 1); // Set the day to 01
-            var endDate = new Date(selectedYear, selectedMonth, 1);
-            var start_date = startDate.toISOString().split('T')[0].replace(/-/g, '/');
-            var end_date = endDate.toISOString().split('T')[0].replace(/-/g, '/');
+            console.log(selectedYear)
+            var resultArray = selectedYear.split('-');
+            console.log(resultArray)
+            console.log(selectedMonth)
+            if(selectedMonth >= 4){
+              selectedYear = resultArray[0]
+              var startDate = new Date(selectedYear, selectedMonth - 1, 1); // Set the day to 01
+              var endDate = new Date(selectedYear, selectedMonth, 1);
+              var start_date = startDate.toISOString().split('T')[0].replace(/-/g, '/');
+              var end_date = endDate.toISOString().split('T')[0].replace(/-/g, '/');
+              console.log(start_date)
+              console.log(end_date)
+            }
+            else{
+            selectedYear = resultArray[1]
+              var startDate = new Date(selectedYear, selectedMonth - 1, 1); // Set the day to 01
+              var endDate = new Date(selectedYear, selectedMonth, 1);
+              var start_date = startDate.toISOString().split('T')[0].replace(/-/g, '/');
+              var end_date = endDate.toISOString().split('T')[0].replace(/-/g, '/');
+              console.log(start_date)
+              console.log(end_date)
+            }
+
+
+
             ajax.rpc('/filter-apply/month-wise', {
                'data': {
                     'start_date': start_date,
@@ -144,12 +167,17 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
         },
 
         yearly_report: function() {
-
+            var financialYearStart = 0;
+            var financialYearEnd = 0;
             var selectedYear = $('#year_wise_selection').val();
-            var startDate = new Date(selectedYear, 0, 1);
-            var endDate = new Date(selectedYear, 11, 31);
+            var resultArray = selectedYear.split('-');
+            financialYearStart = resultArray[0]
+            financialYearEnd = resultArray[1]
+            var startDate = new Date(financialYearStart, 4-1, 2 );
+            var endDate = new Date(financialYearEnd, 3, 1);
             var start_date = startDate.toISOString().split('T')[0].replace(/-/g, '/');
             var end_date = endDate.toISOString().split('T')[0].replace(/-/g, '/');
+
             $('#tbody').empty();
             ajax.rpc('/project/filter-apply/year-wise', {
                 'data': {
@@ -168,6 +196,7 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
                 <td>"+key+"</td>
                 <td>"+data.month_wise_totals[key]['subtotal']+"</td>
                 <td>"+data.month_wise_totals[key]['total']+"</td>
+//                <td>"+data.percentage_year_wise[key]['total']+"</td>
             </tr>";
             $('#tbody').append(Html);
             serialNumber++;
@@ -183,7 +212,7 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
         ajax.rpc('/project/filter').then(function(response) {
             var data = JSON.parse(response);
             console.log(data.years)
-                var years = data.years;
+                var years = data.financial_years;
                 $(years).each(function(index,year) {
                     $('#project_selection').append("<option value=" + year + " class='fs-5'>" + year + "</option>");
                 });
@@ -197,13 +226,14 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
         ajax.rpc('/project/filter').then(function(response) {
             var data = JSON.parse(response);
             console.log(data.years)
-                var years = data.years;
+                var years = data.financial_years;
                 $(years).each(function(index,year) {
                     $('#year_wise_selection').append("<option value=" + year + " class='fs-5'>" + year + "</option>");
                 });
                  });
                  }
         },
+
         _onMonthSelectionClick: function() {
          var $monthSelection = $('#month_selection');
     if ($monthSelection.data('loaded') !== true) {
@@ -211,16 +241,25 @@ odoo.define('pj_dashboard.Dashboard', function(require) {
         $monthSelection.data('loaded', true);
         ajax.rpc('/month/filter').then(function(response) {
             var data = JSON.parse(response);
-            console.log(data.months)
-                var years = data.months;
-                $(years).each(function(index,year) {
-                var monthNumber = index + 1;
-                    $('#month_selection').append("<option value=" + monthNumber + " class='fs-5'>" + year + "</option>");
-                });
+//            console.log(data.z)
+                var months = data.z;
+//                $(years).each(function(index,year) {
+//               var monthNumber = index + 4;
+//                    $('#month_selection').append("<option value=" + monthNumber + " class='fs-5'>" + year + "</option>");
+//                });
+            var startIndex = 4;
+
+        // Iterate through the months and populate the select box
+        for (var i = startIndex; i <= 12; i++) {
+            $('#month_selection').append("<option value=" + i + " class='fs-5'>" + months[i] + "</option>");
+        }
+        for (var j = 1; j < startIndex; j++) {
+            $('#month_selection').append("<option value=" + j + " class='fs-5'>" + months[j] + "</option>");
+        }
                  });
                  }
         },
-
+// for (const key in data.month_wise_totals)
         fetch_data: function() {
             var self = this;
             var def4 = self._rpc({
